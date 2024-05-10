@@ -1,6 +1,15 @@
 let deck = [] // of cards
 const types = ['C', 'H', 'D', 'S'] // Clover, Hearts, Diamonds, Spades
 const specials = ['A', 'J', 'Q', 'K'] //As, Jack, Queen, King
+
+//HTML REFERENCES
+const btnAsk = document.querySelector('#btnAsk')
+let playerPoints = 0,
+    computerPoints = 0;
+const smallPoints = document.querySelectorAll('small')
+const divPlayerCards = document.querySelector('#player-cards')
+const divComputerCards = document.querySelector('#computer-cards')
+
 // This function create a new deck in order
 const createDeck = () => {
     for (let i = 2; i <= 10; i++) {
@@ -31,8 +40,8 @@ const askCard = () => {
     }
 
     const card = deck.shift()
-    console.log(deck);
-    console.log(card);
+    // console.log(deck);
+    // console.log(card);
     return card
 }
 
@@ -59,4 +68,47 @@ const cardValue = (card) => {
 }
 
 const value = cardValue(askCard())
-console.log({ value });
+// console.log({ value });
+
+//Computer turn
+
+const computerTurn = (minimumPoints) => {
+    do {
+        const card = askCard()
+        computerPoints = computerPoints + cardValue(card)
+        smallPoints[1].innerText = computerPoints
+        const imgNewCard = document.createElement('img');
+        imgNewCard.src = `./cards/${card}.png`
+        imgNewCard.classList.add('cards')
+        divComputerCards.append(imgNewCard);
+
+        if (minimumPoints > 21) {
+            break;
+        }
+
+    } while ((computerPoints < minimumPoints) && (minimumPoints <= 21));
+}
+
+
+//Events
+
+btnAsk.addEventListener('click', () => {
+
+    const card = askCard()
+    playerPoints = playerPoints + cardValue(card)
+    smallPoints[0].innerText = playerPoints
+    const imgNewCard = document.createElement('img');
+    imgNewCard.src = `./cards/${card}.png`
+    imgNewCard.classList.add('cards')
+    divPlayerCards.append(imgNewCard);
+
+    if (playerPoints > 21) {
+        console.log('You lose');
+        btnAsk.disabled = true;
+        computerTurn(playerPoints)
+    } else if (playerPoints === 21) {
+        console.log('You got 21');
+        btnAsk.disabled = true;
+        computerTurn(playerPoints)
+    }
+})
