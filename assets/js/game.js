@@ -4,6 +4,8 @@ const specials = ['A', 'J', 'Q', 'K'] //As, Jack, Queen, King
 
 //HTML REFERENCES
 const btnAsk = document.querySelector('#btnAsk')
+const btnStop = document.querySelector('#btnStop')
+const btnNew = document.querySelector('#btnNew')
 let playerPoints = 0,
     computerPoints = 0;
 const smallPoints = document.querySelectorAll('small')
@@ -87,6 +89,19 @@ const computerTurn = (minimumPoints) => {
         }
 
     } while ((computerPoints < minimumPoints) && (minimumPoints <= 21));
+
+    setTimeout(() => {
+        if (computerPoints === minimumPoints) {
+            alert('No winner')
+        } else if (minimumPoints > 21) {
+            alert('Computer wins')
+        } else if (computerPoints > 21) {
+            alert('player 1 wins')
+        } else {
+            alert('Computer wins')
+        }
+    }, 10)
+
 }
 
 
@@ -105,10 +120,34 @@ btnAsk.addEventListener('click', () => {
     if (playerPoints > 21) {
         console.log('You lose');
         btnAsk.disabled = true;
+        btnStop.disabled = true;
         computerTurn(playerPoints)
     } else if (playerPoints === 21) {
         console.log('You got 21');
         btnAsk.disabled = true;
+        btnStop.disabled = true;
         computerTurn(playerPoints)
+
     }
+})
+
+btnStop.addEventListener('click', () => {
+
+    btnAsk.disabled = true;
+    computerTurn(playerPoints)
+    btnStop.disabled = true;
+})
+
+btnNew.addEventListener('click', () => {
+    console.clear()
+    btnAsk.disabled = false;
+    btnStop.disabled = false;
+    deck = []
+    createDeck()
+    playerPoints = 0
+    computerPoints = 0
+    smallPoints[0] = 0
+    smallPoints[1] = 0
+    divComputerCards.innerHTML = ''
+    divPlayerCards.innerHTML = ''
 })
